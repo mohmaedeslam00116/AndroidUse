@@ -5,3 +5,14 @@ firebase-debug.*.log
 # Local conda environments (Anaconda Desktop plugin)
 .conda/
 b5bf2e54cb654f7b/
+
+# Gradle / Kotlin build output
+.gradle/
+.kotlin/
+build/
+local.properties
+
+# IDE
+.idea/
+*.iml
+.DS_Store
