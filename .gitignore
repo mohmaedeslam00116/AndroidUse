@@ -1,3 +1,7 @@
 firebase-debug.log
 firebase-debug.*.log
 *.local
+
+# Local conda environments (Anaconda Desktop plugin)
+.conda/
+b5bf2e54cb654f7b/
