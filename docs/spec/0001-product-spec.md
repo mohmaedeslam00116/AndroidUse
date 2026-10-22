@@ -146,11 +146,25 @@ skipping the message, because the protocol has no `error` message in the
 Relay-to-device direction, and a skipped `act` would leave the Agent waiting
 forever.
 
+**Authentication.** The device token is **not** a field in any envelope. It is
+an HTTP header on the WebSocket upgrade - `Authorization: Bearer <token>` - so
+the Relay authenticates the connection before it reads a single message. The
+Relay looks the device up by the token and refuses the upgrade if the token is
+unknown or revoked. `hello` then identifies the device, and the Relay refuses
+the session if `hello`'s device id does not match the token's device.
+
+**The `act` tool's schema does not travel on the device link.** The device
+executes Actions; it does not call a model, and the action kinds are already
+defined once in `:protocol`. The schema is the Provider-facing description of
+the `act` tool, and it is sent in the Provider request, because a provider
+requires the tool definition in every request. The Run's language - which
+selects the schema's language - travels on `run_start`.
+
 **Device → Relay**
 
 | Type | Payload |
 | --- | --- |
-| `hello` | device id, token, app version, capabilities of the device |
+| `hello` | device id, app version, the device's language, and the Local Policy the device is enforcing |
 | `perception` | frame (JPEG, base64) + tree (elements) + fingerprint + foreground package |
 | `outcome` | the typed result of the action just executed |
 | `approval_response` | the user's decision for a pending approval |
@@ -161,7 +175,7 @@ forever.
 
 | Type | Payload |
 | --- | --- |
-| `run_start` | goal, language, budget, the action schema for this model |
+| `run_start` | run id, goal, language, budget, and the Relay's mirror of the Local Policy |
 | `act` | one action: kind, target, and kind-specific parameters |
 | `approval_request` | what is wanted, in which app, why, and the possible decisions |
 | `run_end` | outcome and the final message to show the user |
