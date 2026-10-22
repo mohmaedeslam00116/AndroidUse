@@ -49,7 +49,7 @@ In addition:
 - **Compaction.** When the conversation exceeds the model's context, the Relay
   compacts it, dropping old frames and old tool bodies first. The Relay
   tracks compaction failures and ends the Run after 3 consecutive failures.
-- **Loop detection.** The Relay compares consecutive **Screen Fingerprints**;
+- **Loop detection.** The Relay compares consecutive **Screen Sets** (ADR-0009);
   5 consecutive near-identical screens (Jaccard ≥ 0.95) is a stall, and the
   Relay injects a "you appear to be repeating yourself" turn before ending
   the Run. This is a warning, not a strategy change — the Agent decides.
@@ -88,3 +88,10 @@ spend on our account, and they do not stop a legal-but-useless loop.
 
 **Charge per use, like a hosted agent product.** Compatible with this ADR, and
 probably where the business model ends up, but it does not replace the caps.
+
+## Related
+
+- [ADR-0009](0009-screen-fingerprint-and-screen-set.md) - the Screen
+  Fingerprint and the Screen Set. This ADR's loop detection compares Screen
+  Sets; the fingerprint itself answers a different question.
+
