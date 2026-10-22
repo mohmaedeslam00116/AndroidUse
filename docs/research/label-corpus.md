@@ -26,15 +26,15 @@ two problems actually are.
 **Answer in one line.** The lists are a bad detector. Under the shipped
 substring rule, `تم` alone escalates **4 645** of the 82 326 distinct real
 labels in the corpus to `MESSAGE_SEND` (1 851 of them even with whole-word
-matching), and of the 20 ASCII entries the median plausible-positive ratio is
-**0.20** - one label in five is a real hit. Four entries (`إرسل`, `order now`,
-`ادفع`, `اشتري`) never fire on anything, and three of the real button
-captions that matter (`forward`, `reply`, `check out`) are not in the lists at
-all. The recommendation is to **replace** the two substring lists with a
-**normalised, word-boundary-aware matcher over a much smaller, curated
-concept set**, and to **additionally** key on the *action context* (a
-`ACTION_SEND` intent, a `WebView` URL, a `role=button` node inside a
-composer) rather than on the word alone.
+matching), and of the 21 ASCII entries the 20 that fire at all have a median
+plausible-positive ratio of **0.20** - one label in five is a real hit. Four
+entries (`إرسل`, `order now`, `ادفع`, `اشتري`) never fire on anything, and
+three of the real button captions that matter (`forward`, `reply`,
+`check out`) are not in the lists at all. The recommendation is to **replace**
+the two substring lists with a **normalised, word-boundary-aware matcher over
+a much smaller, curated concept set**, and to **additionally** key on the
+*action context* (an `ACTION_SEND` intent, a `WebView` URL, a `role=button`
+node inside a composer) rather than on the word alone.
 
 ---
 
@@ -367,11 +367,11 @@ Two things follow.
 
 **Replace the two lists; do not merely narrow or supplement them.** The
 numbers say the lists are not a detector with a bad threshold, they are a
-detector whose signal is mostly noise: of the 20 ASCII entries the median
-plausible-positive ratio is **0.20**, the best is `buy` at **0.64** (and
-`place order` at 1.00, but it fires on 2 labels); of the 14 Arabic entries
-the best is `تأكيد` at **0.29**, and `اشتر` and `اشتري` score **0.00** while
-`دفع` scores **0.04**.
+detector whose signal is mostly noise: of the 21 ASCII entries the median
+plausible-positive ratio is **0.20** (the 20 that fire at all), the best is
+`buy` at **0.64** (and `place order` at 1.00, but it fires on 2 labels); of
+the 16 Arabic entries the best is `تأكيد` at **0.29**, and `اشتر` and
+`اشتري` score **0.00** while `دفع` scores **0.04**.
 
 Concretely, in priority order:
 
