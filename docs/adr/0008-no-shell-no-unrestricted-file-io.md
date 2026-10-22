@@ -48,9 +48,10 @@ cleartext. The Relay is reached over TLS.
 
 **The manifest is minimal.** AndroidUse declares only what it uses, and the
 `<queries>` element is scoped to the launcher intent rather than
-`QUERY_ALL_PACKAGES`. No `READ_SMS`, no `READ_CONTACTS`, no `CAMERA`, no
-`LOCATION`, no `READ_PHONE_STATE`. Message and contact reading, if they are
-ever added, arrive as their own Capability with their own Approval.
+`QUERY_ALL_PACKAGES`. Message and contact reading, if they are ever added,
+arrive as their own Capability with their own Approval. The exact allow-list
+and deny-list are enumerated in `docs/release-permissions.txt` and asserted by
+the release test, so there is one list rather than two (ADR-0010).
 
 **One privileged component.** Exactly one service in the app holds
 AccessibilityService powers, and the only way to reach it is the app-private

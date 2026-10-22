@@ -263,7 +263,7 @@ enforces its own subset plus a per-capability rate limit.
 | NFR-1 | Runs on Android 10 (API 29) and later, on a stock device, with no root. |
 | NFR-2 | The model API key exists only in the Relay. |
 | NFR-3 | No third-party application can drive the AccessibilityService (ADR-0005). |
-| NFR-4 | The manifest declares only used permissions; no `QUERY_ALL_PACKAGES`, no SMS/contacts/camera/location in v1. |
+| NFR-4 | The release manifest declares **exactly** the permissions in the allow-list of `docs/release-permissions.txt`, and none in its deny-list. That file is the single source of truth, and the test in `:app` reads it (ADR-0010). |
 | NFR-5 | Cleartext traffic is denied. |
 | NFR-6 | A frame is never persisted unless the user opted into transcript recording. |
 | NFR-7 | A Step's device-side latency (capture + execute) is under 400 ms at the 95th percentile. |
@@ -272,8 +272,10 @@ enforces its own subset plus a per-capability rate limit.
 
 ## 8. Acceptance criteria for v1
 
-1. On an API 29 emulator and an API 34 device, a user grants the three
-   permissions and runs "open the clock app and set an alarm for 07:00" in
+1. On an API 29 emulator and an API 34 device, a user grants the four things
+   AndroidUse asks for - the AccessibilityService toggle, the MediaProjection
+   consent, the `SYSTEM_ALERT_WINDOW` grant and the `POST_NOTIFICATIONS`
+   prompt - and runs "open the clock app and set an alarm for 07:00" in
    Arabic; the transcript shows the goal, the steps, and a success message in
    Arabic.
 2. A Run that reaches its step budget ends with `budget_exhausted` and names
@@ -282,7 +284,11 @@ enforces its own subset plus a per-capability rate limit.
    card and does not type until the user allows it.
 4. A hostile Relay that asks for a `deny`-capability action is refused by the
    device, and the refusal appears in the transcript.
-5. `grep` over the release manifest shows only the permissions in NFR-4.
+5. The release manifest's `<uses-permission>` set is exactly the allow-list
+   in `docs/release-permissions.txt`, its deny-list is absent, the control
+   service is `exported="false"` and guarded by the signature-level
+   `ai.androiduse.permission.DEVICE_CONTROL`, and the capture service
+   declares `android:foregroundServiceType="mediaProjection"` (ADR-0010).
 6. The eval harness passes on a stub model with at least 4 scripted tasks.
 
 ## 9. Risks

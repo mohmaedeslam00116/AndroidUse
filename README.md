@@ -20,6 +20,7 @@ bullets.
 | `CONTEXT.md` | The domain model and the vocabulary. Read this first. |
 | `docs/adr/` | The load-bearing decisions, with the alternatives that were rejected. |
 | `docs/spec/0001-product-spec.md` | The product and technical specification. |
+| `docs/release-permissions.txt` | The exact permission set of the release manifest. The single source of truth; the release test reads it. See ADR-0010. |
 | `docs/research/reference-analysis.md` | What three existing phone-agent projects do, what we take from them, and what we refuse. |
 | `docs/agents/` | The configuration the engineering skills read. |
 | `protocol/` | The wire contract, shared by the phone and the relay. Pure Kotlin, no Android. |

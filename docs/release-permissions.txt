@@ -1,0 +1,41 @@
+# The release manifest's exact permission set.
+#
+# Single source of truth. The test in `:app` reads this file and asserts that
+# the release manifest's `<uses-permission>` set is exactly the allow-list
+# below, that nothing in the deny-list is present, and that every allow-list
+# entry carries a justification.
+#
+# Format: one entry per line, and on an allow-list line the justification
+# follows a `#`. The test must not accept an entry with an empty
+# justification - "adding a permission to make the assertion pass is a
+# defect, not a fix".
+#
+# ADR-0010 records why the list has this shape and what was rejected.
+#
+# This file covers the `<uses-permission>` set only. The rest of the
+# manifest's security surface is asserted by name in the test:
+#   - the custom signature-level permission `ai.androiduse.permission.DEVICE_CONTROL`
+#   - the component guard `android.permission.BIND_ACCESSIBILITY_SERVICE` on
+#     the AccessibilityService (ADR-0005)
+#   - the component guard `ai.androiduse.permission.DEVICE_CONTROL` on the
+#     app-private control service, declared `exported="false"` (ADR-0005)
+#   - `<queries>` scoped to the launcher intent, never `QUERY_ALL_PACKAGES`
+#   - `android:foregroundServiceType="mediaProjection"` on the capture
+#     service (ADR-0002)
+
+[allow]
+android.permission.INTERNET # the Relay's WebSocket connection, over TLS (ADR-0001, ADR-0008)
+android.permission.FOREGROUND_SERVICE # the MediaProjection capture service (ADR-0002)
+android.permission.FOREGROUND_SERVICE_MEDIA_PROJECTION # the same service's foreground service type on API 34+; without it startForeground throws (ADR-0002)
+android.permission.SYSTEM_ALERT_WINDOW # the Overlay: the Approval card and the Run's status line (ADR-0002, ADR-0007)
+android.permission.POST_NOTIFICATIONS # telling the user their screen is being shared, while it is
+
+[deny]
+android.permission.QUERY_ALL_PACKAGES
+android.permission.READ_SMS
+android.permission.READ_CONTACTS
+android.permission.CAMERA
+android.permission.ACCESS_FINE_LOCATION
+android.permission.ACCESS_COARSE_LOCATION
+android.permission.ACCESS_BACKGROUND_LOCATION
+android.permission.READ_PHONE_STATE
