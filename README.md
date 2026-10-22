@@ -58,14 +58,21 @@ relay holds the model key, so the phone never does.
 
 ## Building
 
-The build needs JDK 17 and the Android SDK (compileSdk 35). The Gradle
-wrapper pins the rest.
+`:protocol` pins `jvmToolchain(17)`. Gradle provisions that JDK itself - the
+`foojay-resolver-convention` plugin in `settings.gradle.kts` does it - so any
+JDK 17 or newer can run the build, and the first build downloads a JDK 17 if the
+machine does not have one. Gradle 8.11.1 cannot run on JDK 25.
+
+The Android SDK (compileSdk 35) is needed for the app and relay modules.
 
 ```bash
 ./gradlew :protocol:test     # the wire contract
-./gradlew :app:assembleDebug
-./gradlew :relay:run
+./gradlew :app:assembleDebug  # needs the app module
+./gradlew :relay:run          # needs the relay module
 ```
+
+`:app` and `:relay` are declared in `settings.gradle.kts` but do not exist yet;
+the last two commands fail until the tracer bullets that create them land.
 
 `GRADLE_USER_HOME` and `TEMP` are expected to point at a drive with room:
 a full `C:` will fail the build and the JADX bridge alike.
@@ -75,7 +82,14 @@ a full `C:` will fail the build and the JADX bridge alike.
 Issues live in this repository's GitHub Issues. The specification is issue
 [#1](https://github.com/mohmaedeslam00116/AndroidUse/issues/1); the tracer
 bullets are [#2](https://github.com/mohmaedeslam00116/AndroidUse/issues/2)
-through [#10](https://github.com/mohmaedeslam00116/AndroidUse/issues/10).
+through [#10](https://github.com/mohmaedeslam00116/AndroidUse/issues/10), and
+[#11](https://github.com/mohmaedeslam00116/AndroidUse/issues/11) is the live
+model Provider adapter.
+
+The [wayfinder map](https://github.com/mohmaedeslam00116/AndroidUse/issues/12)
+holds the decisions that make the backlog trustworthy and takeable. Every issue
+above is a child of it, and the blocking edges are native GitHub issue
+dependencies, so the frontier is visible on the map issue.
 
 ## Licence
 
