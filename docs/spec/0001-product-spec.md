@@ -128,8 +128,23 @@ they can read and change.
 
 ### 5.2 The protocol
 
-A newline-delimited JSON envelope over WebSocket. Every message carries a
+Each WebSocket **text** message carries exactly one JSON envelope. There is no
+delimiter and no batching: a message that does not contain exactly one envelope
+is a protocol violation, not a message to be salvaged. Every message carries a
 `type`; the types are defined once in `:protocol` and used by both ends.
+
+The framing is the WebSocket message boundary, because WebSocket is already a
+message-framed transport. A newline-delimited format inside it would need a
+reader, a writer and a delimiter that neither `:protocol` nor Ktor's
+message-based WebSocket plugin has, and it would let the two ends disagree
+about how many envelopes a message holds. Nothing in the protocol needs
+batching: the Relay sends one `act` at a time, and the device answers with one
+`outcome` per action.
+
+A framing violation is fatal. The receiver closes the connection rather than
+skipping the message, because the protocol has no `error` message in the
+Relay-to-device direction, and a skipped `act` would leave the Agent waiting
+forever.
 
 **Device → Relay**
 
